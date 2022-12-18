@@ -36,14 +36,17 @@ export const updatePokemon = async (req, res) => {
                 url: req.body.url
             },
             {
-                where: { id: req.body.id },
+                where: { id: req.params.id }, //should get the id from the params
             }
         );
 
         res.status(200);
-        res.json(updatedPoke);
+        //res.json(updatedPoke);
+        res.json({success:true, result:"Updated pokemon #"+req.params.id}) //best to put more detailed info in response
     } catch (error) {
         console.log(error);
+        res.json({success:false, result:"Could not update pokemon #"+req.params.id}) //best to put more detailed info in response
+
     }
 };
 
@@ -51,12 +54,16 @@ export const deletePokemon = async (req, res) => {
     try {
         const deletePoke = await Pokemon.destroy({
             where: {
-                id: req.body.id,
+                id: req.params.id, //should get the id from the params
             }
         });
-        res.json(deletePoke);
+        //res.json(deletePoke);
+        res.json({success:true, result:"Deleted pokemon #"+req.params.id}) //best to put more detailed info in response
+
     } catch (error) {
         console.log(error);
+        res.json({success:false, result:"Could not delete pokemon #"+req.params.id}) //best to put more detailed info in response
+
     }
 }
 
@@ -69,6 +76,9 @@ export const initDb = async (req, res) => {
             }
         }
       });
+
+      //would be even better if it could check the existence of the database/table and create if needed
+      //also would be good to check if data exists and only call API if needed
 
     fetch('https://pokeapi.co/api/v2/pokemon?limit=10')
         .then(response => response.json())
@@ -85,4 +95,5 @@ export const initDb = async (req, res) => {
             }
             res.json(data)
         })
+        .catch(e => res.json(e)) //so user knows if something went wrong
 }

@@ -1,6 +1,7 @@
 import {Sequelize} from "sequelize";
 
-const db = new Sequelize('pokemondb','root','admin',{
+//should move these into a .env file
+const db = new Sequelize('pokemondb','root','iodmysql2022',{
     host: "localhost",
     dialect: "mysql"
 });
